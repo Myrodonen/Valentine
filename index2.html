@@ -221,6 +221,91 @@
 
     // ===== Buttons / "Nein" weglaufen =====
     const playground = document.getElementById("playground");
-    const bt
+    const btnrow = document.getElementById("btnrow");
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn  = document.getElementById("noBtn");
+    const modal  = document.getElementById("modal");
+    const closeBtn = document.getElementById("closeBtn");
+    const modalText = document.getElementById("modalText");
 
-    
+    modalText.textContent = "Okay, dann ist’s offiziell 😌💘 Ich bin Deiner. Für diesen Tag und auch alle anderen 💙";
+
+    let armed = false;
+    let placeholder = null;
+
+    function armNo() {
+      if (armed) return;
+      armed = true;
+
+      const pr = playground.getBoundingClientRect();
+      const nr = noBtn.getBoundingClientRect();
+
+      // Platzhalter, damit Layout nicht springt
+      placeholder = document.createElement("span");
+      placeholder.style.display = "inline-block";
+      placeholder.style.width  = nr.width + "px";
+      placeholder.style.height = nr.height + "px";
+      btnrow.insertBefore(placeholder, noBtn);
+
+      // Button in Playground verschieben
+      playground.appendChild(noBtn);
+      noBtn.style.position = "absolute";
+      noBtn.style.left = (nr.left - pr.left) + "px";
+      noBtn.style.top  = (nr.top  - pr.top ) + "px";
+    }
+
+    function jumpNo() {
+      armNo();
+
+      const rect = playground.getBoundingClientRect();
+      const b = noBtn.getBoundingClientRect();
+      const pad = 14;
+
+      const minX = pad;
+      const maxX = Math.max(pad, rect.width  - b.width  - pad);
+
+      // oben nicht in den Fragetext rein
+      const minY = 70;
+      const maxY = Math.max(minY, rect.height - b.height - 18);
+
+      const x = Math.random() * (maxX - minX) + minX;
+      const y = Math.random() * (maxY - minY) + minY;
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top  = y + "px";
+    }
+
+    // Erst sichtbar, dann bei Hover/Touch "abhauen"
+    noBtn.addEventListener("pointerenter", () => jumpNo());
+
+    // Mobile: beim Tippen sofort weg
+    noBtn.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      jumpNo();
+    }, { passive:false });
+
+    // Wenn man ihn jagt, springt er weiter
+    playground.addEventListener("pointermove", (e) => {
+      if (!armed) return;
+      const pr = playground.getBoundingClientRect();
+      const bx = e.clientX - pr.left;
+      const by = e.clientY - pr.top;
+
+      const nb = noBtn.getBoundingClientRect();
+      const cx = (nb.left - pr.left) + nb.width/2;
+      const cy = (nb.top  - pr.top ) + nb.height/2;
+
+      const dx = bx - cx;
+      const dy = by - cy;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+
+      if (dist < 95) jumpNo(); // leicht größer = schwerer zu treffen
+    });
+
+    yesBtn.addEventListener("click", () => modal.classList.add("show"));
+    closeBtn.addEventListener("click", () => modal.classList.remove("show"));
+    modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("show"); });
+  </script>
+</body>
+</html>
+
