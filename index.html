@@ -153,6 +153,44 @@
       border-radius: 999px;
       font-weight: 650;
     }
+
+    /* ===== BIG HEART (Modal) ===== */
+    .big-heart{
+      width: 150px;
+      height: 150px;
+      margin: 10px auto 12px;
+      position: relative;
+      transform: rotate(45deg) scale(0);
+      opacity: 0;
+      background: rgba(255,77,109,.95);
+      border-radius: 16px;
+      filter: drop-shadow(0 18px 42px rgba(255,77,109,.30));
+      pointer-events: none;
+    }
+    .big-heart::before,
+    .big-heart::after{
+      content:"";
+      position:absolute;
+      width: 150px;
+      height: 150px;
+      background: rgba(255,77,109,.95);
+      border-radius: 50%;
+    }
+    .big-heart::before{ left:-75px; top:0; }
+    .big-heart::after{ left:0; top:-75px; }
+
+    .big-heart.show{
+      animation: heartPop 520ms cubic-bezier(.2,.9,.2,1) forwards,
+                 heartPulse 1200ms ease-in-out 520ms infinite;
+    }
+    @keyframes heartPop{
+      from { transform: rotate(45deg) scale(0); opacity: 0; }
+      to   { transform: rotate(45deg) scale(1); opacity: 1; }
+    }
+    @keyframes heartPulse{
+      0%, 100% { transform: rotate(45deg) scale(1); }
+      50%      { transform: rotate(45deg) scale(1.08); }
+    }
   </style>
 </head>
 <body>
@@ -181,6 +219,10 @@
     <div class="box">
       <h2>Yesss! 💞</h2>
       <p id="modalText"></p>
+
+      <!-- NEU: Großes Herz (kommt beim Klick auf "Und du meine ?") -->
+      <div id="bigHeart" class="big-heart" aria-hidden="true"></div>
+
       <button class="close" id="closeBtn">Und du meine ?</button>
     </div>
   </div>
@@ -227,6 +269,10 @@
     const modal  = document.getElementById("modal");
     const closeBtn = document.getElementById("closeBtn");
     const modalText = document.getElementById("modalText");
+
+    // NEU: großes Herz
+    const bigHeart = document.getElementById("bigHeart");
+    let heartShown = false;
 
     modalText.textContent = "Okay, dann ist’s offiziell 😌💘 Ich bin Deiner. Für diesen Tag und auch alle anderen 💙";
 
@@ -302,10 +348,39 @@
       if (dist < 95) jumpNo(); // leicht größer = schwerer zu treffen
     });
 
-    yesBtn.addEventListener("click", () => modal.classList.add("show"));
-    closeBtn.addEventListener("click", () => modal.classList.remove("show"));
-    modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("show"); });
+    // Modal öffnen (reset Herz bei jedem Öffnen)
+    yesBtn.addEventListener("click", () => {
+      modal.classList.add("show");
+      bigHeart.classList.remove("show");
+      heartShown = false;
+      closeBtn.textContent = "Und du meine ?";
+    });
+
+    // NEU: 1. Klick -> Herz zeigen, 2. Klick -> schließen
+    closeBtn.addEventListener("click", () => {
+      if (!heartShown) {
+        bigHeart.classList.add("show");
+        heartShown = true;
+        closeBtn.textContent = "Okay 💙";
+        return;
+      }
+      modal.classList.remove("show");
+      bigHeart.classList.remove("show");
+      heartShown = false;
+      closeBtn.textContent = "Und du meine ?";
+    });
+
+    // Klick außerhalb -> schließen + reset
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.classList.remove("show");
+        bigHeart.classList.remove("show");
+        heartShown = false;
+        closeBtn.textContent = "Und du meine ?";
+      }
+    });
   </script>
 </body>
 </html>
+
 
