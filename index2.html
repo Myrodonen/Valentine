@@ -65,7 +65,7 @@
       color: rgba(0,0,0,.88);
       box-shadow: 0 14px 34px rgba(255,77,109,.18);
     }
-    /* WICHTIG: "Nein" ist am Anfang NICHT absolute => sichtbar in der Reihe */
+    /* "Nein" ist am Anfang normal sichtbar in der Reihe */
     .no{
       background: rgba(255,255,255,.10);
       color: rgba(255,255,255,.86);
@@ -106,7 +106,7 @@
   <div class="wrap">
     <div class="card">
       <h1>Hey Lisa 💖</h1>
-      <p>Hey mein Schatz. Ich denke ganz viel an dich in letzter Zeit und wollte deshalb fragen:</p>
+      <p>Mein Schatz, ich denke ganz viel an dich in letzter Zeit. Du machst mich so unfassbar glücklich, deshalb wollte ich fragen:</p>
 
       <div class="playground" id="playground">
         <div class="question">Willst du mein Valentins-Schatz sein?</div>
@@ -118,7 +118,7 @@
       </div>
 
       <div class="footer">
-        <div>— [dein Name]</div>
+        <div>— dein Mann</div>
         <div>PS: „Nein“ ist nur kurz mutig.</div>
       </div>
     </div>
@@ -149,18 +149,15 @@
       if (armed) return;
       armed = true;
 
-      // aktuelle Position messen (während er noch normal in der Reihe ist)
       const pr = playground.getBoundingClientRect();
       const nr = noBtn.getBoundingClientRect();
 
-      // Platzhalter in der Button-Reihe, damit "Ja" nicht springt
       placeholder = document.createElement("span");
       placeholder.style.display = "inline-block";
       placeholder.style.width  = nr.width + "px";
       placeholder.style.height = nr.height + "px";
       btnrow.insertBefore(placeholder, noBtn);
 
-      // Button in den Playground verschieben (damit er frei herumwandern kann)
       playground.appendChild(noBtn);
       noBtn.style.position = "absolute";
       noBtn.style.left = (nr.left - pr.left) + "px";
@@ -177,7 +174,6 @@
       const minX = pad;
       const maxX = Math.max(pad, rect.width  - b.width  - pad);
 
-      // oben nicht in den Fragetext rein
       const minY = 70;
       const maxY = Math.max(minY, rect.height - b.height - 18);
 
@@ -188,16 +184,13 @@
       noBtn.style.top  = y + "px";
     }
 
-    // Verhalten: sichtbar -> erst bei Hover/Touch springt er weg
     noBtn.addEventListener("pointerenter", () => jumpNo());
 
-    // Mobile: beim Tippen sofort weg
     noBtn.addEventListener("pointerdown", (e) => {
       e.preventDefault();
       jumpNo();
     }, { passive:false });
 
-    // Danach: wenn man ihn jagt, springt er weiter
     playground.addEventListener("pointermove", (e) => {
       if (!armed) return;
       const pr = playground.getBoundingClientRect();
