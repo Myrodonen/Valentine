@@ -6,8 +6,7 @@
   <title>Für dich 💘</title>
   <style>
     :root{
-      --bg1:#0b1020;
-      --bg2:#1a0b2e;
+      --bg1:#0b1020; --bg2:#1a0b2e;
       --card: rgba(255,255,255,.08);
       --border: rgba(255,255,255,.16);
       --text: rgba(255,255,255,.92);
@@ -17,54 +16,15 @@
     }
     *{ box-sizing:border-box; }
     body{
-      margin:0;
-      min-height:100vh;
-      color:var(--text);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      margin:0; min-height:100vh; color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       background:
         radial-gradient(1200px 800px at 20% 20%, rgba(255,77,109,.22), transparent 55%),
         radial-gradient(900px 700px at 80% 30%, rgba(135,92,255,.22), transparent 55%),
-        radial-gradient(900px 900px at 40% 90%, rgba(0,255,209,.12), transparent 55%),
         linear-gradient(160deg, var(--bg1), var(--bg2));
       overflow-x:hidden;
     }
-
-    /* floating hearts */
-    .heart{
-      position: fixed;
-      bottom:-40px;
-      width: 18px; height: 18px;
-      transform: rotate(45deg);
-      background: rgba(255,77,109,.9);
-      border-radius: 4px;
-      filter: drop-shadow(0 8px 18px rgba(255,77,109,.25));
-      animation: floatUp linear forwards;
-      z-index: 0;
-      pointer-events:none;
-    }
-    .heart:before, .heart:after{
-      content:"";
-      position:absolute;
-      width: 18px; height: 18px;
-      background: rgba(255,77,109,.9);
-      border-radius: 50%;
-    }
-    .heart:before{ left:-9px; top:0; }
-    .heart:after{ left:0; top:-9px; }
-    @keyframes floatUp{
-      from{ transform: translateY(0) rotate(45deg); opacity: .95; }
-      to{ transform: translateY(-120vh) rotate(45deg); opacity: 0; }
-    }
-
-    .wrap{
-      position:relative;
-      z-index:1;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding: 28px 14px;
-      min-height:100vh;
-    }
+    .wrap{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:28px 14px; }
     .card{
       width:min(720px, 96vw);
       background: var(--card);
@@ -74,102 +34,51 @@
       backdrop-filter: blur(10px);
       padding: 26px 18px 18px;
     }
-    h1{
-      margin: 6px 0 10px;
-      font-size: clamp(22px, 4.3vw, 34px);
-      letter-spacing: .2px;
-      line-height: 1.15;
-    }
-    p{
-      margin: 0 0 16px;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.55;
-    }
+    h1{ margin: 6px 0 10px; font-size: clamp(22px, 4.3vw, 34px); line-height:1.15; }
+    p{ margin: 0 0 16px; color: var(--muted); font-size: 15px; line-height: 1.55; }
 
     .playground{
       position: relative;
-      height: 200px;
+      height: 210px;
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,.14);
       background: rgba(0,0,0,.18);
       overflow:hidden;
       padding: 14px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
     }
-
     .question{
-      position:absolute;
-      top: 24px;
-      left: 14px;
-      right: 14px;
-      text-align:center;
-      color: rgba(255,255,255,.92);
-      font-size: 18px;
+      position:absolute; top: 26px; left: 14px; right: 14px;
+      text-align:center; font-size: 18px;
       user-select:none;
     }
-
     .btnrow{
-      position:absolute;
-      bottom: 18px;
-      left: 14px;
-      right: 14px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap: 14px;
+      position:absolute; bottom: 18px; left: 14px; right: 14px;
+      display:flex; align-items:center; justify-content:center; gap: 14px;
     }
     button{
-      border: 0;
-      border-radius: 999px;
-      padding: 12px 18px;
-      font-size: 15px;
-      cursor:pointer;
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-      transition: transform .15s ease, filter .15s ease;
-      font-weight: 650;
-      letter-spacing:.2px;
+      border: 0; border-radius: 999px;
+      padding: 12px 18px; font-size: 15px; font-weight: 650;
+      cursor:pointer; user-select:none; -webkit-tap-highlight-color: transparent;
     }
-    button:active{ transform: scale(.98); }
-
     .yes{
       background: linear-gradient(135deg, rgba(255,77,109,1), rgba(255,149,0,.92));
       color: rgba(0,0,0,.88);
       box-shadow: 0 14px 34px rgba(255,77,109,.18);
     }
-
+    /* WICHTIG: "Nein" ist am Anfang NICHT absolute => sichtbar in der Reihe */
     .no{
-      position:absolute; /* wir bewegen ihn */
       background: rgba(255,255,255,.10);
       color: rgba(255,255,255,.86);
       border: 1px solid rgba(255,255,255,.16);
       backdrop-filter: blur(6px);
-      /* “wandert” sichtbar, aber bleibt da */
       transition: left .14s ease, top .14s ease;
     }
 
-    .footer{
-      margin-top: 12px;
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      color: rgba(255,255,255,.55);
-      font-size: 12px;
-      user-select:none;
-      flex-wrap:wrap;
-    }
+    .footer{ margin-top: 12px; display:flex; justify-content:space-between; gap:10px; color: rgba(255,255,255,.55); font-size: 12px; flex-wrap:wrap; }
 
-    /* modal */
     .modal{
-      position: fixed;
-      inset: 0;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding: 16px;
+      position: fixed; inset: 0; display:none;
+      align-items:center; justify-content:center; padding: 16px;
       background: rgba(0,0,0,.55);
       z-index: 10;
     }
@@ -182,16 +91,6 @@
       box-shadow: var(--shadow);
       padding: 18px 16px 14px;
       text-align:center;
-      position:relative;
-      overflow:hidden;
-    }
-    .modal h2{
-      margin: 6px 0 8px;
-      font-size: 22px;
-    }
-    .modal p{
-      margin: 0 0 14px;
-      color: rgba(255,255,255,.78);
     }
     .close{
       background: rgba(255,255,255,.10);
@@ -201,41 +100,16 @@
       border-radius: 999px;
       font-weight: 650;
     }
-
-    /* confetti */
-    .confetti{
-      position: fixed;
-      inset: 0;
-      pointer-events:none;
-      z-index: 11;
-      overflow:hidden;
-      display:none;
-    }
-    .confetti.show{ display:block; }
-    .confetti i{
-      position:absolute;
-      top:-12px;
-      width:10px; height:16px;
-      background: rgba(255,255,255,.9);
-      opacity:.9;
-      transform: rotate(15deg);
-      animation: fall linear forwards;
-      border-radius: 3px;
-      filter: drop-shadow(0 10px 16px rgba(0,0,0,.25));
-    }
-    @keyframes fall{
-      to{ transform: translateY(120vh) rotate(360deg); opacity: 0.95; }
-    }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
-      <h1 id="headline"></h1>
-      <p id="intro"></p>
+      <h1>Hey Lisa 💖</h1>
+      <p>Hey mein Schatz. Ich denke ganz viel an dich in letzter Zeit und wollte deshalb fragen:</p>
 
       <div class="playground" id="playground">
-        <div class="question" id="question"></div>
+        <div class="question">Willst du mein Valentins-Schatz sein?</div>
 
         <div class="btnrow" id="btnrow">
           <button class="yes" id="yesBtn">Ja! 💘</button>
@@ -244,173 +118,106 @@
       </div>
 
       <div class="footer">
-        <div id="tiny"></div>
-        <div>PS: „Nein“ ist heute auf Wanderschaft.</div>
+        <div>— [dein Name]</div>
+        <div>PS: „Nein“ ist nur kurz mutig.</div>
       </div>
     </div>
   </div>
 
-  <div class="confetti" id="confetti"></div>
-
   <div class="modal" id="modal">
     <div class="box">
-      <h2 id="modalTitle">Yesss! 💞</h2>
-      <p id="modalText"></p>
+      <h2 style="margin:6px 0 8px;">Yesss! 💞</h2>
+      <p style="margin:0 0 14px; color:rgba(255,255,255,.78);">
+        Okay, dann ist’s offiziell 😌💘 Ich freu mich auf unseren Valentinstag.
+      </p>
       <button class="close" id="closeBtn">Okay 😄</button>
     </div>
   </div>
 
   <script>
-    // ======= PERSONALISIEREN (nur hier ändern) =======
-    const HER_NAME  = "Lisa";
-    const DEIN_NAME = "— [dein Name]";
-    // ===============================================
-
-    const headline = document.getElementById("headline");
-    const intro = document.getElementById("intro");
-    const question = document.getElementById("question");
-    const tiny = document.getElementById("tiny");
-
-    headline.textContent = "Hey " + HER_NAME + " 💖";
-    intro.textContent = "Hey mein Schatz. Ich denke ganz viel an dich in letzter Zeit und wollte deshalb fragen:";
-    question.textContent = "Willst du mein Valentins-Schatz sein?";
-    tiny.textContent = DEIN_NAME;
-
-    // Floating hearts
-    function spawnHeart(){
-      const h = document.createElement("div");
-      h.className = "heart";
-      const size = 10 + Math.random()*18;
-      h.style.width = size + "px";
-      h.style.height = size + "px";
-      h.style.left = (Math.random()*100) + "vw";
-      h.style.animationDuration = (4 + Math.random()*5) + "s";
-      h.style.opacity = (0.45 + Math.random()*0.5).toFixed(2);
-      document.body.appendChild(h);
-      setTimeout(()=>h.remove(), 9000);
-    }
-    setInterval(spawnHeart, 450);
-
     const playground = document.getElementById("playground");
+    const btnrow = document.getElementById("btnrow");
     const yesBtn = document.getElementById("yesBtn");
     const noBtn  = document.getElementById("noBtn");
+    const modal  = document.getElementById("modal");
+    const closeBtn = document.getElementById("closeBtn");
 
-    // --- “Nein” wandert hin & her (ohne zu verschwinden) ---
-    let side = 0;     // 0 = links, 1 = rechts
-    let level = 0;    // 0 = unten, 1 = etwas höher
-    let lastMove = 0; // cooldown gegen Flackern
+    let armed = false;
+    let placeholder = null;
 
-    function setNoPos(){
+    function armNo() {
+      if (armed) return;
+      armed = true;
+
+      // aktuelle Position messen (während er noch normal in der Reihe ist)
+      const pr = playground.getBoundingClientRect();
+      const nr = noBtn.getBoundingClientRect();
+
+      // Platzhalter in der Button-Reihe, damit "Ja" nicht springt
+      placeholder = document.createElement("span");
+      placeholder.style.display = "inline-block";
+      placeholder.style.width  = nr.width + "px";
+      placeholder.style.height = nr.height + "px";
+      btnrow.insertBefore(placeholder, noBtn);
+
+      // Button in den Playground verschieben (damit er frei herumwandern kann)
+      playground.appendChild(noBtn);
+      noBtn.style.position = "absolute";
+      noBtn.style.left = (nr.left - pr.left) + "px";
+      noBtn.style.top  = (nr.top  - pr.top ) + "px";
+    }
+
+    function jumpNo() {
+      armNo();
+
       const rect = playground.getBoundingClientRect();
       const b = noBtn.getBoundingClientRect();
+      const pad = 14;
 
-      const padding = 14;
+      const minX = pad;
+      const maxX = Math.max(pad, rect.width  - b.width  - pad);
 
-      const leftX  = padding;
-      const rightX = Math.max(padding, rect.width - b.width - padding);
+      // oben nicht in den Fragetext rein
+      const minY = 70;
+      const maxY = Math.max(minY, rect.height - b.height - 18);
 
-      const lowY  = Math.max(70, rect.height - b.height - 18);   // nahe unten
-      const highY = Math.max(70, lowY - 62);                     // etwas höher
-
-      const x = (side === 0) ? leftX : rightX;
-      const y = (level === 0) ? lowY : highY;
+      const x = Math.random() * (maxX - minX) + minX;
+      const y = Math.random() * (maxY - minY) + minY;
 
       noBtn.style.left = x + "px";
       noBtn.style.top  = y + "px";
     }
 
-    function wanderNo(){
-      const now = Date.now();
-      if (now - lastMove < 120) return; // cooldown
-      lastMove = now;
+    // Verhalten: sichtbar -> erst bei Hover/Touch springt er weg
+    noBtn.addEventListener("pointerenter", () => jumpNo());
 
-      side = 1 - side;   // links <-> rechts
-      level = 1 - level; // unten <-> oben
-      setNoPos();
-
-      // Meme: Ja wird minimal “mutiger”
-      const t = Math.min(1.0 + (now % 7) * 0.02, 1.25);
-      yesBtn.style.transform = "scale(" + t.toFixed(2) + ")";
-    }
-
-    // initial position after layout
-    requestAnimationFrame(setNoPos);
-    window.addEventListener("resize", () => requestAnimationFrame(setNoPos));
-
-    // Wenn man zu nah kommt: wandert er weg
-    playground.addEventListener("pointermove", (e) => {
-      const rect = playground.getBoundingClientRect();
-      const bx = e.clientX - rect.left;
-      const by = e.clientY - rect.top;
-
-      const nb = noBtn.getBoundingClientRect();
-      const nbCenterX = (nb.left - rect.left) + nb.width/2;
-      const nbCenterY = (nb.top  - rect.top ) + nb.height/2;
-
-      const dx = bx - nbCenterX;
-      const dy = by - nbCenterY;
-      const dist = Math.sqrt(dx*dx + dy*dy);
-
-      // “Greif-Radius”: wenn man nahe genug dran ist, wechselt er die Seite
-      if (dist < 90) wanderNo();
-    });
-
-    // Für Touch: beim Antippen wandert er sofort
+    // Mobile: beim Tippen sofort weg
     noBtn.addEventListener("pointerdown", (e) => {
       e.preventDefault();
-      e.stopPropagation();
-      wanderNo();
-    }, {passive:false});
+      jumpNo();
+    }, { passive:false });
 
-    // Falls sie’s trotzdem irgendwie klickt
-    noBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      wanderNo();
+    // Danach: wenn man ihn jagt, springt er weiter
+    playground.addEventListener("pointermove", (e) => {
+      if (!armed) return;
+      const pr = playground.getBoundingClientRect();
+      const bx = e.clientX - pr.left;
+      const by = e.clientY - pr.top;
+
+      const nb = noBtn.getBoundingClientRect();
+      const cx = (nb.left - pr.left) + nb.width/2;
+      const cy = (nb.top  - pr.top ) + nb.height/2;
+
+      const dx = bx - cx;
+      const dy = by - cy;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+
+      if (dist < 90) jumpNo();
     });
 
-    // Confetti
-    const confetti = document.getElementById("confetti");
-    function popConfetti(){
-      confetti.innerHTML = "";
-      confetti.classList.add("show");
-      const count = 120;
-      for(let i=0;i<count;i++){
-        const p = document.createElement("i");
-        const left = Math.random()*100;
-        const delay = Math.random()*0.35;
-        const dur = 2.6 + Math.random()*2.2;
-
-        const hue = Math.floor(Math.random()*360);
-        p.style.background = `hsla(${hue}, 95%, 70%, .95)`;
-
-        p.style.left = left + "vw";
-        p.style.animationDelay = delay + "s";
-        p.style.animationDuration = dur + "s";
-        p.style.transform = `rotate(${Math.random()*90}deg)`;
-        p.style.width = (8 + Math.random()*8) + "px";
-        p.style.height = (10 + Math.random()*14) + "px";
-        confetti.appendChild(p);
-      }
-      setTimeout(()=>confetti.classList.remove("show"), 4200);
-    }
-
-    // Modal
-    const modal = document.getElementById("modal");
-    const modalText = document.getElementById("modalText");
-    const closeBtn = document.getElementById("closeBtn");
-
-    yesBtn.addEventListener("click", () => {
-      popConfetti();
-      modalText.textContent =
-        "Okay, dann ist’s offiziell 😌💘 Ich freu mich auf unseren Valentinstag. " +
-        DEIN_NAME;
-      modal.classList.add("show");
-    });
-
+    yesBtn.addEventListener("click", () => modal.classList.add("show"));
     closeBtn.addEventListener("click", () => modal.classList.remove("show"));
-    modal.addEventListener("click", (e) => {
-      if(e.target === modal) modal.classList.remove("show");
-    });
+    modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("show"); });
   </script>
 </body>
 </html>
