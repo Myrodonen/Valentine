@@ -1,1 +1,311 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Für dich 💘</title>
+  <style>
+    :root{
+      --bg1:#0b1020; --bg2:#1a0b2e;
+      --card: rgba(255,255,255,.09);
+      --border: rgba(255,255,255,.18);
+      --text: rgba(255,255,255,.94);
+      --muted: rgba(255,255,255,.74);
+      --shadow: 0 20px 90px rgba(0,0,0,.50);
+      --radius: 18px;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0; min-height:100vh; color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background:
+        radial-gradient(1200px 800px at 20% 20%, rgba(255,77,109,.26), transparent 55%),
+        radial-gradient(900px 700px at 80% 30%, rgba(135,92,255,.26), transparent 55%),
+        radial-gradient(800px 800px at 50% 95%, rgba(0,255,209,.12), transparent 55%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
+    }
+
+    /* ===== Floating Hearts ===== */
+    .heart{
+      position: fixed;
+      bottom:-40px;
+      width: 18px; height: 18px;
+      transform: rotate(45deg);
+      background: rgba(255,77,109,.95);
+      border-radius: 4px;
+      filter: drop-shadow(0 10px 22px rgba(255,77,109,.28));
+      animation: floatUp linear forwards;
+      z-index: 0;
+      pointer-events:none;
+    }
+    .heart:before, .heart:after{
+      content:"";
+      position:absolute;
+      width: 18px; height: 18px;
+      background: rgba(255,77,109,.95);
+      border-radius: 50%;
+    }
+    .heart:before{ left:-9px; top:0; }
+    .heart:after{ left:0; top:-9px; }
+    @keyframes floatUp{
+      from{ transform: translateY(0) rotate(45deg); opacity: .95; }
+      to{ transform: translateY(-120vh) rotate(45deg); opacity: 0; }
+    }
+
+    .wrap{ position:relative; z-index:1; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:28px 14px; }
+    .card{
+      width:min(720px, 96vw);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      padding: 26px 18px 18px;
+    }
+    h1{
+      margin: 6px 0 10px;
+      font-size: clamp(22px, 4.3vw, 34px);
+      line-height:1.15;
+      text-shadow: 0 10px 30px rgba(255,77,109,.18);
+    }
+    p{ margin: 0 0 16px; color: var(--muted); font-size: 15px; line-height: 1.55; }
+
+    .playground{
+      position: relative;
+      height: 210px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.18);
+      overflow:hidden;
+      padding: 14px;
+    }
+    .question{
+      position:absolute; top: 26px; left: 14px; right: 14px;
+      text-align:center; font-size: 18px;
+      user-select:none;
+    }
+    .btnrow{
+      position:absolute; bottom: 18px; left: 14px; right: 14px;
+      display:flex; align-items:center; justify-content:center; gap: 14px;
+    }
+    button{
+      border: 0; border-radius: 999px;
+      padding: 12px 18px; font-size: 15px; font-weight: 650;
+      cursor:pointer; user-select:none; -webkit-tap-highlight-color: transparent;
+      transition: transform .15s ease, filter .15s ease;
+    }
+    button:active{ transform: scale(.98); }
+    .yes{
+      background: linear-gradient(135deg, rgba(255,77,109,1), rgba(255,149,0,.92));
+      color: rgba(0,0,0,.88);
+      box-shadow: 0 14px 34px rgba(255,77,109,.22);
+    }
+    /* "Nein" ist am Anfang normal sichtbar in der Reihe */
+    .no{
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.86);
+      border: 1px solid rgba(255,255,255,.16);
+      backdrop-filter: blur(6px);
+      transition: left .14s ease, top .14s ease;
+    }
+
+    .footer{
+      margin-top: 12px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      color: rgba(255,255,255,.58);
+      font-size: 12px;
+      flex-wrap:wrap;
+    }
+
+    .modal{
+      position: fixed; inset: 0; display:none;
+      align-items:center; justify-content:center; padding: 16px;
+      background: rgba(0,0,0,.60);
+      z-index: 10;
+    }
+    .modal.show{ display:flex; }
+    .modal .box{
+      width: min(560px, 96vw);
+      background: rgba(20,20,28,.92);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 18px 16px 14px;
+      text-align:center;
+    }
+    .modal h2{
+      margin:6px 0 8px;
+      text-shadow: 0 10px 28px rgba(255,77,109,.18);
+    }
+    .modal p{
+      margin:0 0 14px;
+      color: rgba(255,255,255,.82);
+      line-height: 1.55;
+    }
+    .close{
+      background: rgba(255,255,255,.10);
+      color: rgba(255,255,255,.86);
+      border: 1px solid rgba(255,255,255,.14);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 650;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Hey Lisa 💖</h1>
+      <p>Mein Schatz, ich denke ganz viel an dich in letzter Zeit. Du machst mich so unfassbar glücklich, deshalb wollte ich fragen:</p>
+
+      <div class="playground" id="playground">
+        <div class="question">Willst du mein Valentins-Schatz sein?</div>
+
+        <div class="btnrow" id="btnrow">
+          <button class="yes" id="yesBtn">Ja! 💘</button>
+          <button class="no" id="noBtn">Nein 🙃</button>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>— dein Mann</div>
+        <div>PS: „Nein“ ist nur kurz mutig.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="box">
+      <h2>Yesss! 💞</h2>
+      <p id="modalText"></p>
+      <button class="close" id="closeBtn">Okay 😄</button>
+    </div>
+  </div>
+
+  <script>
+    // ===== Floating Hearts (kitschiger) =====
+    function spawnHeart(){
+      const h = document.createElement("div");
+      h.className = "heart";
+
+      const size = 10 + Math.random() * 22;         // variabler
+      h.style.width  = size + "px";
+      h.style.height = size + "px";
+
+      // links/rechts random + leichter drift
+      const left = Math.random() * 100;
+      h.style.left = left + "vw";
+
+      // Dauer + Opazität variieren
+      h.style.animationDuration = (4 + Math.random() * 5.5) + "s";
+      h.style.opacity = (0.45 + Math.random() * 0.5).toFixed(2);
+
+      // Manche Herzen etwas „blauer“ fürs 💙-Feeling
+      if (Math.random() < 0.22) {
+        h.style.background = "rgba(92,169,255,.95)";
+        h.style.filter = "drop-shadow(0 10px 22px rgba(92,169,255,.30))";
+        // pseudo-elements übernehmen die Background-Farbe automatisch nicht,
+        // daher setzen wir sie über CSS-Variable geht nicht sauber -> Trick:
+        // wir lassen sie pink (merkt man kaum), oder du willst’s komplett blau:
+        // sag kurz, dann mach ich es über separate Klasse.
+      }
+
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 10000);
+    }
+    // etwas häufiger = kitschiger
+    setInterval(spawnHeart, 320);
+
+    // ===== Buttons / "Nein" weglaufen =====
+    const playground = document.getElementById("playground");
+    const btnrow = document.getElementById("btnrow");
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn  = document.getElementById("noBtn");
+    const modal  = document.getElementById("modal");
+    const closeBtn = document.getElementById("closeBtn");
+    const modalText = document.getElementById("modalText");
+
+    modalText.textContent = "Okay, dann ist’s offiziell 😌💘 Ich bin Deiner. Für diesen Tag und auch alle anderen 💙";
+
+    let armed = false;
+    let placeholder = null;
+
+    function armNo() {
+      if (armed) return;
+      armed = true;
+
+      const pr = playground.getBoundingClientRect();
+      const nr = noBtn.getBoundingClientRect();
+
+      // Platzhalter, damit Layout nicht springt
+      placeholder = document.createElement("span");
+      placeholder.style.display = "inline-block";
+      placeholder.style.width  = nr.width + "px";
+      placeholder.style.height = nr.height + "px";
+      btnrow.insertBefore(placeholder, noBtn);
+
+      // Button in Playground verschieben
+      playground.appendChild(noBtn);
+      noBtn.style.position = "absolute";
+      noBtn.style.left = (nr.left - pr.left) + "px";
+      noBtn.style.top  = (nr.top  - pr.top ) + "px";
+    }
+
+    function jumpNo() {
+      armNo();
+
+      const rect = playground.getBoundingClientRect();
+      const b = noBtn.getBoundingClientRect();
+      const pad = 14;
+
+      const minX = pad;
+      const maxX = Math.max(pad, rect.width  - b.width  - pad);
+
+      // oben nicht in den Fragetext rein
+      const minY = 70;
+      const maxY = Math.max(minY, rect.height - b.height - 18);
+
+      const x = Math.random() * (maxX - minX) + minX;
+      const y = Math.random() * (maxY - minY) + minY;
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top  = y + "px";
+    }
+
+    // Erst sichtbar, dann bei Hover/Touch "abhauen"
+    noBtn.addEventListener("pointerenter", () => jumpNo());
+
+    // Mobile: beim Tippen sofort weg
+    noBtn.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      jumpNo();
+    }, { passive:false });
+
+    // Wenn man ihn jagt, springt er weiter
+    playground.addEventListener("pointermove", (e) => {
+      if (!armed) return;
+      const pr = playground.getBoundingClientRect();
+      const bx = e.clientX - pr.left;
+      const by = e.clientY - pr.top;
+
+      const nb = noBtn.getBoundingClientRect();
+      const cx = (nb.left - pr.left) + nb.width/2;
+      const cy = (nb.top  - pr.top ) + nb.height/2;
+
+      const dx = bx - cx;
+      const dy = by - cy;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+
+      if (dist < 95) jumpNo(); // leicht größer = schwerer zu treffen
+    });
+
+    yesBtn.addEventListener("click", () => modal.classList.add("show"));
+    closeBtn.addEventListener("click", () => modal.classList.remove("show"));
+    modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("show"); });
+  </script>
+</body>
+</html>
 
